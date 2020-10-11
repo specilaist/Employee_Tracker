@@ -13,7 +13,7 @@ const startApp = () => {
             {
                   name: 'start',
                   type: 'confirm',
-                  message: 'Would you like to create a new Employee?'
+                  message: 'Would you like to enter the database?'
             },
             {
                   name: 'action',
@@ -33,7 +33,7 @@ const startApp = () => {
                       viewDepartments();
                       break;
                   case 'Update employee roles':
-                      bidAuction();
+                      updateRoles();
                       break;
                   case 'View combined budget':
                       viewBudget();
@@ -42,7 +42,7 @@ const startApp = () => {
                       viewManager();
                       break;
                   case 'Update employee managers':
-                      connection.end();
+                      updateManager();
                       break;
                   default:
                       connection.end();
@@ -88,12 +88,6 @@ function newEmployee() {
       })
 };
 
-function getEmployees() {
-      const queries = "SELECT * FROM employees;";
-      connection.query(queries, (err, employee))
-
-}
-
 const addDepartments = () => {
   inquirer.prompt([
     {
@@ -102,45 +96,37 @@ const addDepartments = () => {
       message: 'Please create a new department'
     }
   ]).then((answer) => {
-    const queries = "INSERT INTO employees SET ?;";
+    console.log(answer);
+    const queries = "INSERT INTO department SET ?;";
     connection.query(queries, (err, employee))
 
   })
 };
 
 const viewDepartments = () => {
-  inquirer.prompt([
-    {
-      name: 'department',
-      type: 'input',
-      message: 'Please create a new department'
-    }
-  ]).then((answer) => {
-    console.log(answer);
-    const queries = "INSERT INTO employees SET ?;";
-    connection.query(queries, (err, employee))
-
-  })
+  const queries = "SELECT * FROM department;";
+  connection.query(queries, (err, employee) => {
+    if (err) throw err;
+    console.table(employee)
+  });
+  startApp();
 };
 
 const viewBudget = () => {
-  inquirer.prompt([
-    {
-      name: 'department',
-      type: 'input',
-      message: 'Please create a new department'
-    }
-  ]).then((answer) => {
-    console.log(answer);
-    const queries = "INSERT INTO employees SET ?;";
-    connection.query(queries, (err, employee))
-
-  })
-  const queries = "SELECT * FROM employees;";
-  connection.query(queries, (err, employee))
+  const queries = "SELECT * FROM role;";
+  connection.query(queries, (err, budget) => {
+    if (err) throw err;
+    console.table(budget)
+  });
+  startApp();
 };
 
 const viewManager = () => {
+  const queries = "SELECT * FROM employees;";
+  connection.query(queries, (err, employee))
+};
+
+const updateManager = () => {
   inquirer.prompt([
     {
       name: 'department',
@@ -149,13 +135,33 @@ const viewManager = () => {
     }
   ]).then((answer) => {
     console.log(answer);
-    const queries = "INSERT INTO employees SET ?;";
+    const queries = "UPDATE  SET ?;";
     connection.query(queries, (err, employee))
 
   })
   const queries = "SELECT * FROM employees;";
   connection.query(queries, (err, employee))
 };
+
+// const updateRoles = () => {
+//   connection.query("SELECT * FROM auctions;", (err, employees) => {
+
+//   }
+//   inquirer.prompt([
+//     {
+//       name: 'department',
+//       type: 'input',
+//       message: 'Please create a new department'
+//     }
+//   ]).then((answer) => {
+//     console.log(answer);
+//     const queries = "INSERT INTO employees SET ?;";
+//     connection.query(queries, (err, employee))
+
+//   })
+//   const queries = "SELECT * FROM employees;";
+//   connection.query(queries, (err, employee))
+// };
 
 
 startApp();
